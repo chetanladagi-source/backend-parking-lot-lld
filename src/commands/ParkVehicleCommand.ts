@@ -1,14 +1,15 @@
 import { Command } from "./Command";
 import { ParkingService } from "../services/ParkingService";
 import { Vehicle } from "../modles/Vehicle";
+import { ParkingTicket } from "../modles/ParkingTicket";
 
-export class ParkVehicleCommand implements Command {
+export class ParkVehicleCommand implements Command<ParkingTicket> {
   constructor(
-    private parkingService: ParkingService,
-    private vehicle: Vehicle,
+    private readonly parkingService: ParkingService,
+    private readonly vehicle: Vehicle,
   ) {}
 
-  execute(): void {
-    this.parkingService.parkVehicle(this.vehicle);
+  public execute(): ParkingTicket {
+    return this.parkingService.parkVehicle(this.vehicle);
   }
 }

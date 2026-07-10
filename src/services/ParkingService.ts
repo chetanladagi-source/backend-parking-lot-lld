@@ -1,19 +1,21 @@
+import { randomUUID } from "crypto";
 import { ParkingLot } from "../modles/ParkingLot";
 import { ParkingSlot } from "../modles/ParkingSlot";
 import { Vehicle } from "../modles/Vehicle";
 import { Observer } from "../observers/Observer";
 import { ParkingStrategy } from "../strategies/ParkingStrategy";
 import { ParkingValidator } from "../validators/ParkingValidator";
+import { ParkingTicket } from "../modles/ParkingTicket";
 
 export class ParkingService {
   constructor(
-    private parkingLot: ParkingLot,
-    private parkingStrategy: ParkingStrategy,
-    private validator: ParkingValidator,
+    private readonly parkingLot: ParkingLot,
+    private readonly parkingStrategy: ParkingStrategy,
+    private readonly validator: ParkingValidator,
   ) {}
 
   private observers: Observer[] = [];
-  public parkVehicle(vehicle: Vehicle): ParkingSlot {
+  public parkVehicle(vehicle: Vehicle): ParkingTicket {
     this.validator.validate(vehicle, this.parkingLot);
     const slot = this.parkingStrategy.findAvailableSlot(
       this.parkingLot,
@@ -28,7 +30,7 @@ export class ParkingService {
 
     this.notifyObservers(slot);
 
-    return slot;
+    return new ParkingTicket(randomUUID(), vehicle, slot);
   }
 
   public addObserver(observer: Observer): void {
@@ -39,5 +41,17 @@ export class ParkingService {
     for (const observer of this.observers) {
       observer.update(slot);
     }
+  }
+
+  public unparkVehicle(ticket: ParkingTicket): ParkingTicket {
+    ticket.closeTicket();
+
+    const slot = ticket.getParkingSlot();
+
+    slot.unparkVehicle();
+
+    this.notifyObservers(slot);
+
+    return ticket;
   }
 }
