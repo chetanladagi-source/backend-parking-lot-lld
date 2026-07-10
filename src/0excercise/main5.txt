@@ -1,0 +1,17 @@
+import { CarCreator } from "./factories/CarCreator";
+import { ParkingSlot } from "./modles/ParkingSlot";
+import { ParkingSlotType } from "./enums/ParkingSlotType";
+
+const creator = new CarCreator();
+
+const car = creator.createVehicle("KA01AB1234", "White");
+
+const slot = new ParkingSlot("A1", ParkingSlotType.CAR);
+
+console.log(slot.isAvailable());
+
+slot.parkVehicle(car);
+
+console.log(slot.isAvailable());
+
+console.log(slot.getVehicle());

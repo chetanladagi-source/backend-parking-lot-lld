@@ -1,0 +1,35 @@
+import { ParkingService } from "../services/ParkingService";
+import { FirstAvailableStrategy } from "../strategies/FirstAvailableStrategy";
+import { VehicleTypeValidator } from "../validators/VehicleTypeValidator";
+import { ParkingLotOpenValidator } from "../validators/ParkingLotOpenValidator";
+import { SlotCompatibilityValidator } from "../validators/SlotCompatibilityValidator";
+import { ParkingLot } from "../modles/ParkingLot";
+import { Vehicle } from "../modles/Vehicle";
+import { ParkVehicleCommand } from "../commands/ParkVehicleCommand";
+import { DisplayBoard } from "../observers/DisplayBoard";
+import { Logger } from "../observers/Logger";
+import { Analytics } from "../observers/Analytics";
+import { registerObservers } from "../config/ParkingConfiguration";
+
+export class ParkingFacade {
+  private parkingService: ParkingService;
+
+  constructor(parkingLot: ParkingLot) {
+    const strategy = new FirstAvailableStrategy();
+
+    const validator = new VehicleTypeValidator();
+
+    validator
+      .setNext(new ParkingLotOpenValidator())
+      .setNext(new SlotCompatibilityValidator());
+
+    this.parkingService = new ParkingService(parkingLot, strategy, validator);
+    registerObservers(this.parkingService);
+  }
+
+  public parkVehicle(vehicle: Vehicle) {
+    const command = new ParkVehicleCommand(this.parkingService, vehicle);
+
+    command.execute();
+  }
+}

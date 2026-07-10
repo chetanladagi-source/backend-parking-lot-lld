@@ -1,0 +1,11 @@
+import { CarCreator } from "./factories/CarCreator";
+import { BikeCreator } from "./factories/BikeCreator";
+
+const car = new CarCreator();
+const bike = new BikeCreator();
+
+const car1 = car.createVehicle("KA01AB1234", "White");
+const bike1 = bike.createVehicle("KA01AB1234", "White");
+
+car1.displayInfo();
+bike1.displayInfo();

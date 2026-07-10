@@ -1,0 +1,30 @@
+import { ParkingLot } from "./modles/ParkingLot";
+import { ParkingFloor } from "./modles/ParkingFloor";
+import { ParkingSlot } from "./modles/ParkingSlot";
+import { ParkingSlotType } from "./enums/ParkingSlotType";
+import { ParkingService } from "./services/ParkingService";
+import { CarCreator } from "./factories/CarCreator";
+import { FirstAvailableStrategy } from "./strategies/FirstAvailableStrategy";
+import { DisplayBoard } from "./observers/DisplayBoard";
+import { Logger } from "./observers/Logger";
+import { Analytics } from "./observers/Analytics";
+import { ParkVehicleCommand } from "./commands/ParkVehicleCommand";
+import { VehicleTypeValidator } from "./validators/VehicleTypeValidator";
+import { ParkingLotOpenValidator } from "./validators/ParkingLotOpenValidator";
+import { SlotCompatibilityValidator } from "./validators/SlotCompatibilityValidator";
+import { ParkingFacade } from "./facades/ParkingFacade";
+const parkingLot = ParkingLot.getInstance("Forum Mall");
+
+const floor1 = new ParkingFloor(1);
+
+floor1.addSlot(new ParkingSlot("A1", ParkingSlotType.CAR));
+floor1.addSlot(new ParkingSlot("A2", ParkingSlotType.CAR));
+
+parkingLot.addFloor(floor1);
+
+const facade = new ParkingFacade(parkingLot);
+
+const creator = new CarCreator();
+const car = creator.createVehicle("KA01AB1234", "White");
+
+facade.parkVehicle(car);

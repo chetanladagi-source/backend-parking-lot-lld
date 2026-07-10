@@ -1,0 +1,19 @@
+export class ParkingLot {
+    
+    private static instance: ParkingLot;
+
+    private constructor() {
+        console.log("Parking Lot Created");
+    }
+
+    public static getInstance(): ParkingLot {
+
+        if (!ParkingLot.instance) {
+            ParkingLot.instance = new ParkingLot();
+        }
+
+        return ParkingLot.instance;
+
+    }
+
+}

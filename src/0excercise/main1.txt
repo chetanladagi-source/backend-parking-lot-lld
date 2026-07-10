@@ -1,0 +1,35 @@
+import { VehicleFactory } from "./factories/VehicleFactory";
+import { VehicleType } from "./enums/VehicleType";
+
+import { CarCreator } from "./factories/CarCreator";
+
+const creator = new CarCreator();
+
+const vehicle = creator.createVehicle(
+    "KA01AB1234",
+    "White"
+);
+
+vehicle.displayInfo();
+
+const car = VehicleFactory.createVehicle(
+  VehicleType.CAR,
+  "KA01AB1234",
+  "White",
+);
+
+const bike = VehicleFactory.createVehicle(
+  VehicleType.BIKE,
+  "KA05XY5678",
+  "Black",
+);
+
+const truck = VehicleFactory.createVehicle(
+  VehicleType.TRUCK,
+  "KA09TR9999",
+  "Blue",
+);
+
+car.displayInfo();
+bike.displayInfo();
+truck.displayInfo();

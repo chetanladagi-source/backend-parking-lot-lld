@@ -1,0 +1,7 @@
+import { ParkingLot } from "./modles/ParkingLot";
+
+const parkingLot1 = ParkingLot.getInstance();
+
+const parkingLot2 = ParkingLot.getInstance();
+
+console.log(parkingLot1 === parkingLot2);

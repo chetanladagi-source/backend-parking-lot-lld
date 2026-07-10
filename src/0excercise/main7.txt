@@ -1,0 +1,30 @@
+import { ParkingLot } from "./modles/ParkingLot";
+import { ParkingFloor } from "./modles/ParkingFloor";
+import { ParkingSlot } from "./modles/ParkingSlot";
+import { ParkingSlotType } from "./enums/ParkingSlotType";
+
+const parkingLot = ParkingLot.getInstance("Forum Mall");
+
+const floor1 = new ParkingFloor(1);
+const floor2 = new ParkingFloor(2);
+
+parkingLot.addFloor(floor1);
+parkingLot.addFloor(floor2);
+
+console.log(parkingLot.getName());
+
+console.log(parkingLot.getAllFloors().length);
+
+floor1.addSlot(
+    new ParkingSlot(
+        "A1",
+        ParkingSlotType.CAR
+    )
+);
+
+floor1.addSlot(
+    new ParkingSlot(
+        "A2",
+        ParkingSlotType.CAR
+    )
+);

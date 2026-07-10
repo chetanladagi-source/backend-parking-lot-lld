@@ -1,0 +1,39 @@
+import { ParkingLot } from "../modles/ParkingLot";
+
+export class ParkingLotBuilder {
+
+    private parkingLot: ParkingLot;
+
+    constructor() {
+        this.parkingLot = new ParkingLot();
+    }
+
+    public setName(name: string): ParkingLotBuilder {
+        this.parkingLot.name = name;
+        return this;
+    }
+
+    public setFloors(floors: number): ParkingLotBuilder {
+        this.parkingLot.floors = floors;
+        return this;
+    }
+
+    public setTotalSlots(totalSlots: number): ParkingLotBuilder {
+        this.parkingLot.totalSlots = totalSlots;
+        return this;
+    }
+
+    public enableSecurity(): ParkingLotBuilder {
+        this.parkingLot.securityEnabled = true;
+        return this;
+    }
+
+    public enableDisplayBoard(): ParkingLotBuilder {
+        this.parkingLot.displayBoardEnabled = true;
+        return this;
+    }
+
+    public build(): ParkingLot {
+        return this.parkingLot;
+    }
+}

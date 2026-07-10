@@ -1,0 +1,21 @@
+import { ParkingLot } from "../modles/ParkingLot";
+import { Vehicle } from "../modles/Vehicle";
+import { ParkingSlot } from "../modles/ParkingSlot";
+
+export class ParkingService {
+  constructor(private parkingLot: ParkingLot) {}
+
+  public parkVehicle(vehicle: Vehicle): ParkingSlot {
+    for (const floor of this.parkingLot.getAllFloors()) {
+      const availableSlot = floor.getAvailableSlot();
+
+      if (availableSlot) {
+        availableSlot.parkVehicle(vehicle);
+
+        return availableSlot;
+      }
+    }
+
+    throw new Error("Parking Lot Full");
+  }
+}

@@ -1,0 +1,48 @@
+import { ParkingSlotStatus } from "../enums/ParkingSlotStatus";
+import { ParkingSlotType } from "../enums/ParkingSlotType";
+import { Vehicle } from "./Vehicle";
+
+export class ParkingSlot {
+  private parkedVehicle: Vehicle | null = null;
+
+  private status = ParkingSlotStatus.AVAILABLE;
+
+  constructor(
+    private readonly slotNumber: string,
+    private readonly slotType: ParkingSlotType,
+  ) {}
+
+  public parkVehicle(vehicle: Vehicle): void {
+    if (this.status === ParkingSlotStatus.OCCUPIED) {
+      throw new Error("Parking Slot is already occupied.");
+    }
+
+    this.parkedVehicle = vehicle;
+    this.status = ParkingSlotStatus.OCCUPIED;
+  }
+
+  public removeVehicle(): void {
+    this.parkedVehicle = null;
+    this.status = ParkingSlotStatus.AVAILABLE;
+  }
+
+  public isAvailable(): boolean {
+    return this.status === ParkingSlotStatus.AVAILABLE;
+  }
+
+  public getVehicle(): Vehicle | null {
+    return this.parkedVehicle;
+  }
+
+  public getSlotNumber(): string {
+    return this.slotNumber;
+  }
+
+  public getSlotType(): ParkingSlotType {
+    return this.slotType;
+  }
+
+  public getStatus(): ParkingSlotStatus {
+    return this.status;
+  }
+}

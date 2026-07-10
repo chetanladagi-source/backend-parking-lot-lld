@@ -1,0 +1,11 @@
+import { ParkingLotBuilder } from "./builders/ParkingLotBuilder";
+
+const parkingLot = new ParkingLotBuilder()
+    .setName("Forum Mall")
+    .setFloors(5)
+    .setTotalSlots(500)
+    .enableSecurity()
+    .enableDisplayBoard()
+    .build();
+
+console.log(parkingLot);

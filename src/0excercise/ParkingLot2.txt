@@ -1,0 +1,11 @@
+export class ParkingLot {
+  public name!: string;
+
+  public floors!: number;
+
+  public totalSlots!: number;
+
+  public securityEnabled!: boolean;
+
+  public displayBoardEnabled!: boolean;
+}
