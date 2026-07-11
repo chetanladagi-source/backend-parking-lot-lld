@@ -43,6 +43,6 @@ export class Application {
 
     const proxy = new ParkingProxy(parkingService);
 
-    return new ParkingFacade(parkingService);
+    return new ParkingFacade(proxy);
   }
 }
