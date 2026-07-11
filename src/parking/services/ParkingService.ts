@@ -6,8 +6,9 @@ import { Observer } from "../observers/Observer";
 import { ParkingStrategy } from "../strategies/ParkingStrategy";
 import { ParkingValidator } from "../validators/ParkingValidator";
 import { ParkingTicket } from "../models/ParkingTicket";
+import { ParkingOperations } from "./ParkingOperations";
 
-export class ParkingService {
+export class ParkingService implements ParkingOperations {
   constructor(
     private readonly parkingLot: ParkingLot,
     private readonly parkingStrategy: ParkingStrategy,

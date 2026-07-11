@@ -3,6 +3,7 @@ import { ParkingFacade } from "../parking/facade/ParkingFacade";
 import { Analytics } from "../parking/observers/Analytics";
 import { DisplayBoard } from "../parking/observers/DisplayBoard";
 import { Logger } from "../parking/observers/Logger";
+import { ParkingProxy } from "../parking/proxy/ParkingProxy";
 import { ParkingService } from "../parking/services/ParkingService";
 import { FirstAvailableStrategy } from "../parking/strategies/FirstAvailableStrategy";
 import { ParkingLotOpenValidator } from "../parking/validators/ParkingLotOpenValidator";
@@ -39,6 +40,8 @@ export class Application {
     parkingService.addObserver(new Logger());
 
     parkingService.addObserver(new Analytics());
+
+    const proxy = new ParkingProxy(parkingService);
 
     return new ParkingFacade(parkingService);
   }
