@@ -47,4 +47,4 @@ setTimeout(() => {
   const processor = new RazorpayPaymentProcessor();
 
   processor.process(500);
-}, 10000);
+}, 3000);

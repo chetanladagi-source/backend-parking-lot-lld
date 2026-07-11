@@ -1,5 +1,6 @@
 import { ParkingLotBuilder } from "../parking/builders/ParkingLotBuilder";
 import { ParkingFacade } from "../parking/facade/ParkingFacade";
+import { ParkingEventMediator } from "../parking/mediators/ParkingEventMediator";
 import { Analytics } from "../parking/observers/Analytics";
 import { DisplayBoard } from "../parking/observers/DisplayBoard";
 import { Logger } from "../parking/observers/Logger";
@@ -33,7 +34,24 @@ export class Application {
       .setNext(new ParkingLotOpenValidator())
       .setNext(new SlotCompatibilityValidator());
 
-    const parkingService = new ParkingService(parkingLot, strategy, validator);
+    const iterator = parkingLot.createAvailableSlotIterator();
+    console.log("========== Available Slots ==========");
+
+    while (iterator.hasNext()) {
+      const slot = iterator.next();
+
+      console.log(`${slot.getSlotNumber()} (${slot.getSlotType()})`);
+    }
+
+    console.log("=====================================");
+
+    const mediator = new ParkingEventMediator();
+    const parkingService = new ParkingService(
+      parkingLot,
+      strategy,
+      validator,
+      mediator,
+    );
 
     parkingService.addObserver(new DisplayBoard());
 

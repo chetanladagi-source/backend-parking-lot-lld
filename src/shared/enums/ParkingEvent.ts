@@ -1,0 +1,9 @@
+export enum ParkingEvent {
+  VEHICLE_PARKED,
+
+  VEHICLE_EXITED,
+
+  PAYMENT_SUCCESS,
+
+  PAYMENT_FAILED,
+}

@@ -7,12 +7,15 @@ import { ParkingStrategy } from "../strategies/ParkingStrategy";
 import { ParkingValidator } from "../validators/ParkingValidator";
 import { ParkingTicket } from "../models/ParkingTicket";
 import { ParkingOperations } from "./ParkingOperations";
+import { ParkingMediator } from "../mediators/ParkingMediator";
+import { ParkingEvent } from "../../shared/enums/ParkingEvent";
 
 export class ParkingService implements ParkingOperations {
   constructor(
     private readonly parkingLot: ParkingLot,
     private readonly parkingStrategy: ParkingStrategy,
     private readonly validator: ParkingValidator,
+    private readonly mediator: ParkingMediator,
   ) {}
 
   private observers: Observer[] = [];
@@ -31,6 +34,7 @@ export class ParkingService implements ParkingOperations {
 
     this.notifyObservers(slot);
 
+    // this.mediator.notify(this, ParkingEvent.VEHICLE_PARKED, ticket);
     return new ParkingTicket(randomUUID(), vehicle, slot);
   }
 
@@ -52,6 +56,8 @@ export class ParkingService implements ParkingOperations {
     slot.unparkVehicle();
 
     this.notifyObservers(slot);
+
+    // this.mediator.notify(this, ParkingEvent.VEHICLE_EXITED, ticket);
 
     return ticket;
   }

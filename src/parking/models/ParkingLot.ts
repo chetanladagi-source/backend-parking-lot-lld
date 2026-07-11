@@ -1,4 +1,5 @@
 import { ParkingFloor } from "./ParkingFloor";
+import { AvailableSlotIterator } from "../iterators/AvailableSlotIterator";
 
 export class ParkingLot {
   private static instance: ParkingLot;
@@ -37,5 +38,9 @@ export class ParkingLot {
 
   public getName(): string {
     return this.name;
+  }
+
+  public createAvailableSlotIterator(): AvailableSlotIterator {
+    return new AvailableSlotIterator(this);
   }
 }
