@@ -51,8 +51,6 @@ const car = creator.createVehicle("KA01AB1234", "White");
 
 const ticket = parkingFacade.parkVehicle(car);
 
-// parkingFacade.undoLastOperation();
-
 console.log("--------------------------------");
 
 console.log("Ticket ID :", ticket.getTicketId());
@@ -61,6 +59,12 @@ console.log("Slot :", ticket.getParkingSlot().getSlotNumber());
 
 console.log("Entry Time :", ticket.getEntryTime());
 console.log("--------------------------------");
+parkingFacade.printExpressionSlots(
+  new AndExpression(
+    new TypeExpression(ParkingSlotType.CAR),
+    new AvailabilityExpression(true),
+  ),
+);
 setTimeout(() => {
   const completedTicket = parkingFacade.unparkVehicle(ticket);
 
