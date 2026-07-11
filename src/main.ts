@@ -1,6 +1,8 @@
 import { Application } from "./app/Application";
+import { AdditionalService } from "./enums/AdditionalService";
 
 import { CarCreator } from "./factories/CarCreator";
+import { BillingService } from "./services/BillingService";
 
 const parkingFacade = Application.createParkingFacade();
 
@@ -26,4 +28,18 @@ setTimeout(() => {
     completedTicket.getParkingDurationInMinutes(),
     "minutes",
   );
-}, 5000);
+
+  const billingService = new BillingService();
+
+  const bill = billingService.calculate(completedTicket, [
+    AdditionalService.CAR_WASH,
+    AdditionalService.PREMIUM_PARKING,
+    AdditionalService.EV_CHARGING,
+  ]);
+
+  console.log("-------------------------");
+
+  console.log(bill.getDescription());
+
+  console.log("Amount : ₹", bill.getAmount());
+}, 10000);
