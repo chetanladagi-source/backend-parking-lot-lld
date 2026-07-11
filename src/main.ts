@@ -5,9 +5,7 @@ import { CarCreator } from "./vehicle/factories/CarCreator";
 import { BillingService } from "./billing/services/BillingService";
 import { RazorpayPaymentProcessor } from "./payment/template/RazorpayPaymentProcessor";
 import { MonthlyParkingPass } from "./parking/models/MonthlyParkingPass";
-import { AndExpression } from "./parking/interpreter/AndExpression";
-import { TypeExpression } from "./parking/interpreter/TypeExpression";
-import { AvailabilityExpression } from "./parking/interpreter/AvailabilityExpression";
+import { SlotFilterBuilder } from "./parking/interpreter/SlotFilterBuilder";
 import { RevenueReportVisitor } from "./parking/visitor/RevenueReportVisitor";
 import { ParkingSlotType } from "./shared/enums/ParkingSlotType";
 
@@ -16,10 +14,7 @@ const parkingFacade = Application.createParkingFacade();
 parkingFacade.printAvailableSlot();
 
 parkingFacade.printExpressionSlots(
-  new AndExpression(
-    new TypeExpression(ParkingSlotType.TRUCK),
-    new AvailabilityExpression(true),
-  ),
+  SlotFilterBuilder.create().ofType(ParkingSlotType.TRUCK).available().build(),
 );
 
 parkingFacade.printRevenueReport(new RevenueReportVisitor());
@@ -60,10 +55,7 @@ console.log("Slot :", ticket.getParkingSlot().getSlotNumber());
 console.log("Entry Time :", ticket.getEntryTime());
 console.log("--------------------------------");
 parkingFacade.printExpressionSlots(
-  new AndExpression(
-    new TypeExpression(ParkingSlotType.CAR),
-    new AvailabilityExpression(true),
-  ),
+  SlotFilterBuilder.create().ofType(ParkingSlotType.CAR).available().build(),
 );
 setTimeout(() => {
   const completedTicket = parkingFacade.unparkVehicle(ticket);
