@@ -2,18 +2,20 @@ import { ParkingSlotType } from "../../shared/enums/ParkingSlotType";
 import { Vehicle } from "../../vehicle/models/Vehicle";
 import { ParkingSlotState } from "../states/ParkingSlotState";
 import { AvailableState } from "../states/AvailableState";
+import { ParkingSlotMetadataFactory } from "../flyweight/ParkingSlotMetadataFactory";
 
 export class ParkingSlot {
-
   private parkedVehicle: Vehicle | null = null;
 
   private state: ParkingSlotState;
+  private readonly metadata;
 
   constructor(
     private readonly slotNumber: string,
-    private readonly slotType: ParkingSlotType
+    private readonly slotType: ParkingSlotType,
   ) {
     this.state = new AvailableState();
+    this.metadata = ParkingSlotMetadataFactory.getMetadata(slotType);
   }
 
   public parkVehicle(vehicle: Vehicle): void {

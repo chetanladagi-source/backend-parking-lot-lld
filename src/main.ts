@@ -4,8 +4,30 @@ import { AdditionalService } from "./shared/enums/AdditionalService";
 import { CarCreator } from "./vehicle/factories/CarCreator";
 import { BillingService } from "./billing/services/BillingService";
 import { RazorpayPaymentProcessor } from "./payment/template/RazorpayPaymentProcessor";
+import { MonthlyParkingPass } from "./parking/models/MonthlyParkingPass";
 
 const parkingFacade = Application.createParkingFacade();
+
+const templatePass = new MonthlyParkingPass(
+  "Default Owner",
+  "DEFAULT",
+  30,
+  "Premium",
+);
+
+const pass1 = templatePass.clone();
+
+pass1.ownerName = "Rahul";
+pass1.vehicleNumber = "KA01AA1111";
+
+const pass2 = templatePass.clone();
+
+pass2.ownerName = "Ankit";
+pass2.vehicleNumber = "KA01BB2222";
+
+console.log(pass1);
+
+console.log(pass2);
 
 const creator = new CarCreator();
 
