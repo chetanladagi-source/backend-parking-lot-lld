@@ -1,3 +1,4 @@
+import { MallParkingFactory } from "../parking/abstract-factory/MallParkingFactory";
 import { ParkingLotBuilder } from "../parking/builders/ParkingLotBuilder";
 import { ParkingFacade } from "../parking/facade/ParkingFacade";
 import { ParkingEventMediator } from "../parking/mediators/ParkingEventMediator";
@@ -11,7 +12,6 @@ import { FirstAvailableStrategy } from "../parking/strategies/FirstAvailableStra
 import { ParkingLotOpenValidator } from "../parking/validators/ParkingLotOpenValidator";
 import { SlotCompatibilityValidator } from "../parking/validators/SlotCompatibilityValidator";
 import { VehicleTypeValidator } from "../parking/validators/VehicleTypeValidator";
-import { RevenueReportVisitor } from "../parking/visitor/RevenueReportVisitor";
 
 export class Application {
   public static createParkingFacade(): ParkingFacade {
@@ -28,7 +28,8 @@ export class Application {
 
       .build();
 
-    const strategy = new FirstAvailableStrategy();
+    const factory = new MallParkingFactory();
+    const strategy = factory.createParkingStrategy();
 
     const validator = new VehicleTypeValidator();
 
@@ -36,28 +37,6 @@ export class Application {
       .setNext(new ParkingLotOpenValidator())
       .setNext(new SlotCompatibilityValidator());
 
-    const iterator = parkingLot.createAvailableSlotIterator();
-    console.log("========== Available Slots ==========");
-
-    while (iterator.hasNext()) {
-      const slot = iterator.next();
-
-      console.log(`${slot.getSlotNumber()} (${slot.getSlotType()})`);
-    }
-
-    console.log("=====================================");
-
-    console.log("========== Revenue Reports ==========");
-
-    const visitor = new RevenueReportVisitor();
-
-    for (const floor of parkingLot.getAllFloors()) {
-      for (const slot of floor.getAllSlots()) {
-        slot.accept(visitor);
-      }
-    }
-
-    console.log("=====================================");
     const mediator = new ParkingEventMediator();
     const caretaker = new ParkingCaretaker();
     const parkingService = new ParkingService(

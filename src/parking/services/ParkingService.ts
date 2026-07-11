@@ -11,6 +11,8 @@ import { ParkingMediator } from "../mediators/ParkingMediator";
 import { ParkingEvent } from "../../shared/enums/ParkingEvent";
 import { ParkingCaretaker } from "../memento/ParkingCaretaker";
 import { ParkingMemento } from "../memento/ParkingMemento";
+import { Expression } from "../interpreter/Expression";
+import { ParkingVisitor } from "../visitor/ParkingVisitor";
 
 export class ParkingService implements ParkingOperations {
   constructor(
@@ -51,6 +53,46 @@ export class ParkingService implements ParkingOperations {
     for (const observer of this.observers) {
       observer.update(slot);
     }
+  }
+
+  public printAvailableSlots(): void {
+    const iterator = this.parkingLot.createAvailableSlotIterator();
+
+    console.log("========== Available Slots ==========");
+
+    while (iterator.hasNext()) {
+      const slot = iterator.next();
+
+      console.log(`${slot.getSlotNumber()} (${slot.getSlotType()})`);
+    }
+
+    console.log("=====================================");
+  }
+
+  public printExpressionSlots(expression: Expression): void {
+    console.log("========== Expreesion  ==========");
+
+    for (const floor of this.parkingLot.getAllFloors()) {
+      for (const slot of floor.getAllSlots()) {
+        if (expression.interpret(slot)) {
+          console.log(slot.getSlotNumber());
+        }
+      }
+    }
+
+    console.log("=====================================");
+  }
+
+  public printRevenueReport(visitor: ParkingVisitor): void {
+    console.log("========== Revenue Reports ==========");
+
+    for (const floor of this.parkingLot.getAllFloors()) {
+      for (const slot of floor.getAllSlots()) {
+        slot.accept(visitor);
+      }
+    }
+
+    console.log("=====================================");
   }
 
   public unparkVehicle(ticket: ParkingTicket): ParkingTicket {

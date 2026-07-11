@@ -5,8 +5,24 @@ import { CarCreator } from "./vehicle/factories/CarCreator";
 import { BillingService } from "./billing/services/BillingService";
 import { RazorpayPaymentProcessor } from "./payment/template/RazorpayPaymentProcessor";
 import { MonthlyParkingPass } from "./parking/models/MonthlyParkingPass";
+import { AndExpression } from "./parking/interpreter/AndExpression";
+import { TypeExpression } from "./parking/interpreter/TypeExpression";
+import { AvailabilityExpression } from "./parking/interpreter/AvailabilityExpression";
+import { RevenueReportVisitor } from "./parking/visitor/RevenueReportVisitor";
+import { ParkingSlotType } from "./shared/enums/ParkingSlotType";
 
 const parkingFacade = Application.createParkingFacade();
+
+parkingFacade.printAvailableSlot();
+
+parkingFacade.printExpressionSlots(
+  new AndExpression(
+    new TypeExpression(ParkingSlotType.TRUCK),
+    new AvailabilityExpression(true),
+  ),
+);
+
+parkingFacade.printRevenueReport(new RevenueReportVisitor());
 
 const templatePass = new MonthlyParkingPass(
   "Default Owner",

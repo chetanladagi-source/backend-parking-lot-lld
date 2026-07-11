@@ -6,6 +6,8 @@ import { ParkingCaretaker } from "../memento/ParkingCaretaker";
 import { ParkingTicket } from "../models/ParkingTicket";
 
 import { ParkingOperations } from "../services/ParkingOperations";
+import { Expression } from "../interpreter/Expression";
+import { ParkingVisitor } from "../visitor/ParkingVisitor";
 
 export class ParkingFacade {
   constructor(private readonly parkingOperations: ParkingOperations) {}
@@ -20,6 +22,18 @@ export class ParkingFacade {
     const command = new UnparkVehicleCommand(this.parkingOperations, ticket);
 
     return command.execute();
+  }
+
+  public printAvailableSlot(): void {
+    this.parkingOperations.printAvailableSlots();
+  }
+
+  public printExpressionSlots(expression: Expression): void {
+    this.parkingOperations.printExpressionSlots(expression);
+  }
+
+  public printRevenueReport(visitor: ParkingVisitor): void {
+    this.parkingOperations.printRevenueReport(visitor);
   }
 
   public undoLastOperation(): void {
