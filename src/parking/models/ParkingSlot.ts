@@ -3,6 +3,7 @@ import { Vehicle } from "../../vehicle/models/Vehicle";
 import { ParkingSlotState } from "../states/ParkingSlotState";
 import { AvailableState } from "../states/AvailableState";
 import { ParkingSlotMetadataFactory } from "../flyweight/ParkingSlotMetadataFactory";
+import { ParkingVisitor } from "../visitor/ParkingVisitor";
 
 export class ParkingSlot {
   private parkedVehicle: Vehicle | null = null;
@@ -52,5 +53,9 @@ export class ParkingSlot {
 
   public isAvailable(): boolean {
     return this.parkedVehicle === null;
+  }
+
+  public accept(visitor: ParkingVisitor): void {
+    visitor.visitParkingSlot(this);
   }
 }

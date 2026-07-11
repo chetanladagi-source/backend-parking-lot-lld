@@ -9,6 +9,8 @@ import { ParkingTicket } from "../models/ParkingTicket";
 import { ParkingOperations } from "./ParkingOperations";
 import { ParkingMediator } from "../mediators/ParkingMediator";
 import { ParkingEvent } from "../../shared/enums/ParkingEvent";
+import { ParkingCaretaker } from "../memento/ParkingCaretaker";
+import { ParkingMemento } from "../memento/ParkingMemento";
 
 export class ParkingService implements ParkingOperations {
   constructor(
@@ -16,6 +18,7 @@ export class ParkingService implements ParkingOperations {
     private readonly parkingStrategy: ParkingStrategy,
     private readonly validator: ParkingValidator,
     private readonly mediator: ParkingMediator,
+    private readonly caretaker: ParkingCaretaker,
   ) {}
 
   private observers: Observer[] = [];
@@ -34,8 +37,10 @@ export class ParkingService implements ParkingOperations {
 
     this.notifyObservers(slot);
 
+    const ticket = new ParkingTicket(randomUUID(), vehicle, slot);
     // this.mediator.notify(this, ParkingEvent.VEHICLE_PARKED, ticket);
-    return new ParkingTicket(randomUUID(), vehicle, slot);
+    // this.caretaker.save(new ParkingMemento(ticket));
+    return ticket;
   }
 
   public addObserver(observer: Observer): void {

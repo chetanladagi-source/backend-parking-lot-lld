@@ -1,6 +1,7 @@
 import { ParkingLotBuilder } from "../parking/builders/ParkingLotBuilder";
 import { ParkingFacade } from "../parking/facade/ParkingFacade";
 import { ParkingEventMediator } from "../parking/mediators/ParkingEventMediator";
+import { ParkingCaretaker } from "../parking/memento/ParkingCaretaker";
 import { Analytics } from "../parking/observers/Analytics";
 import { DisplayBoard } from "../parking/observers/DisplayBoard";
 import { Logger } from "../parking/observers/Logger";
@@ -10,6 +11,7 @@ import { FirstAvailableStrategy } from "../parking/strategies/FirstAvailableStra
 import { ParkingLotOpenValidator } from "../parking/validators/ParkingLotOpenValidator";
 import { SlotCompatibilityValidator } from "../parking/validators/SlotCompatibilityValidator";
 import { VehicleTypeValidator } from "../parking/validators/VehicleTypeValidator";
+import { RevenueReportVisitor } from "../parking/visitor/RevenueReportVisitor";
 
 export class Application {
   public static createParkingFacade(): ParkingFacade {
@@ -45,12 +47,25 @@ export class Application {
 
     console.log("=====================================");
 
+    console.log("========== Revenue Reports ==========");
+
+    const visitor = new RevenueReportVisitor();
+
+    for (const floor of parkingLot.getAllFloors()) {
+      for (const slot of floor.getAllSlots()) {
+        slot.accept(visitor);
+      }
+    }
+
+    console.log("=====================================");
     const mediator = new ParkingEventMediator();
+    const caretaker = new ParkingCaretaker();
     const parkingService = new ParkingService(
       parkingLot,
       strategy,
       validator,
       mediator,
+      caretaker,
     );
 
     parkingService.addObserver(new DisplayBoard());

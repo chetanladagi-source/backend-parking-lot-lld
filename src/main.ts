@@ -35,6 +35,8 @@ const car = creator.createVehicle("KA01AB1234", "White");
 
 const ticket = parkingFacade.parkVehicle(car);
 
+// parkingFacade.undoLastOperation();
+
 console.log("--------------------------------");
 
 console.log("Ticket ID :", ticket.getTicketId());
