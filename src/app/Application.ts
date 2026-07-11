@@ -1,13 +1,13 @@
-import { ParkingLotBuilder } from "../builders/ParkingLotBuilder";
-import { ParkingFacade } from "../facades/ParkingFacade";
-import { Analytics } from "../observers/Analytics";
-import { DisplayBoard } from "../observers/DisplayBoard";
-import { Logger } from "../observers/Logger";
-import { ParkingService } from "../services/ParkingService";
-import { FirstAvailableStrategy } from "../strategies/FirstAvailableStrategy";
-import { ParkingLotOpenValidator } from "../validators/ParkingLotOpenValidator";
-import { SlotCompatibilityValidator } from "../validators/SlotCompatibilityValidator";
-import { VehicleTypeValidator } from "../validators/VehicleTypeValidator";
+import { ParkingLotBuilder } from "../parking/builders/ParkingLotBuilder";
+import { ParkingFacade } from "../parking/facade/ParkingFacade";
+import { Analytics } from "../parking/observers/Analytics";
+import { DisplayBoard } from "../parking/observers/DisplayBoard";
+import { Logger } from "../parking/observers/Logger";
+import { ParkingService } from "../parking/services/ParkingService";
+import { FirstAvailableStrategy } from "../parking/strategies/FirstAvailableStrategy";
+import { ParkingLotOpenValidator } from "../parking/validators/ParkingLotOpenValidator";
+import { SlotCompatibilityValidator } from "../parking/validators/SlotCompatibilityValidator";
+import { VehicleTypeValidator } from "../parking/validators/VehicleTypeValidator";
 
 export class Application {
   public static createParkingFacade(): ParkingFacade {

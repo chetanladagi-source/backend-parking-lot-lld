@@ -1,8 +1,8 @@
 import { Application } from "./app/Application";
-import { AdditionalService } from "./enums/AdditionalService";
+import { AdditionalService } from "./shared/enums/AdditionalService";
 
-import { CarCreator } from "./factories/CarCreator";
-import { BillingService } from "./services/BillingService";
+import { CarCreator } from "./vehicle/factories/CarCreator";
+import { BillingService } from "./billing/services/BillingService";
 
 const parkingFacade = Application.createParkingFacade();
 
