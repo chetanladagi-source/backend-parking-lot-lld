@@ -3,6 +3,7 @@ import { AdditionalService } from "./shared/enums/AdditionalService";
 
 import { CarCreator } from "./vehicle/factories/CarCreator";
 import { BillingService } from "./billing/services/BillingService";
+import { RazorpayPaymentProcessor } from "./payment/template/RazorpayPaymentProcessor";
 
 const parkingFacade = Application.createParkingFacade();
 
@@ -42,4 +43,8 @@ setTimeout(() => {
   console.log(bill.getDescription());
 
   console.log("Amount : ₹", bill.getAmount());
+
+  const processor = new RazorpayPaymentProcessor();
+
+  processor.process(500);
 }, 10000);
