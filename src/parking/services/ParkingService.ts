@@ -70,7 +70,7 @@ export class ParkingService implements ParkingOperations {
   }
 
   public printExpressionSlots(expression: Expression): void {
-    console.log("========== Expreesion  ==========");
+    console.log("========== Available Slot for vehicle type  ==========");
 
     for (const floor of this.parkingLot.getAllFloors()) {
       for (const slot of floor.getAllSlots()) {

@@ -17,12 +17,12 @@ export class Application {
   public static createParkingFacade(): ParkingFacade {
     const parkingLot = new ParkingLotBuilder("Forum Mall")
       .addFloor(1)
-      .addCarSlots(10)
+      .addCarSlots(2)
       .addBikeSlots(5)
       .addTruckSlots(2)
 
       .addFloor(2)
-      .addCarSlots(20)
+      .addCarSlots(3)
       .addBikeSlots(10)
       .addTruckSlots(5)
 

@@ -1,5 +1,6 @@
 import { Application } from "./app/Application";
 import { AdditionalService } from "./shared/enums/AdditionalService";
+import { ParkingSlotType } from "./shared/enums/ParkingSlotType";
 
 import { CarCreator } from "./vehicle/factories/CarCreator";
 import { BillingService } from "./billing/services/BillingService";
@@ -7,58 +8,73 @@ import { RazorpayPaymentProcessor } from "./payment/template/RazorpayPaymentProc
 import { MonthlyParkingPass } from "./parking/models/MonthlyParkingPass";
 import { SlotFilterBuilder } from "./parking/interpreter/SlotFilterBuilder";
 import { RevenueReportVisitor } from "./parking/visitor/RevenueReportVisitor";
-import { ParkingSlotType } from "./shared/enums/ParkingSlotType";
 
-const parkingFacade = Application.createParkingFacade();
+import { ParkingFacade } from "./parking/facade/ParkingFacade";
+import { ParkingTicket } from "./parking/models/ParkingTicket";
 
-parkingFacade.printAvailableSlot();
+const UNPARK_DELAY_MS = 3000;
 
-parkingFacade.printExpressionSlots(
-  SlotFilterBuilder.create().ofType(ParkingSlotType.TRUCK).available().build(),
-);
+function logSection(title: string): void {
+  console.log("\n" + "=".repeat(40));
+  console.log(title);
+  console.log("=".repeat(40));
+}
 
-parkingFacade.printRevenueReport(new RevenueReportVisitor());
+function showInitialAvailability(facade: ParkingFacade): void {
+  logSection("Initial Availability");
 
-const templatePass = new MonthlyParkingPass(
-  "Default Owner",
-  "DEFAULT",
-  30,
-  "Premium",
-);
+  // facade.printAvailableSlot();
 
-const pass1 = templatePass.clone();
+  facade.printExpressionSlots(
+    SlotFilterBuilder.create().ofType(ParkingSlotType.CAR).available().build(),
+  );
 
-pass1.ownerName = "Rahul";
-pass1.vehicleNumber = "KA01AA1111";
+  // facade.printRevenueReport(new RevenueReportVisitor());
+}
 
-const pass2 = templatePass.clone();
+function demoMonthlyPassCloning(): void {
+  logSection("Monthly Pass Cloning (Prototype)");
 
-pass2.ownerName = "Ankit";
-pass2.vehicleNumber = "KA01BB2222";
+  const templatePass = new MonthlyParkingPass(
+    "Default Owner",
+    "DEFAULT",
+    30,
+    "Premium",
+  );
 
-console.log(pass1);
+  const pass1 = templatePass.clone();
+  pass1.ownerName = "Rahul";
+  pass1.vehicleNumber = "KA01AA1111";
 
-console.log(pass2);
+  const pass2 = templatePass.clone();
+  pass2.ownerName = "Ankit";
+  pass2.vehicleNumber = "KA01BB2222";
 
-const creator = new CarCreator();
+  console.log(pass1);
+  console.log(pass2);
+}
 
-const car = creator.createVehicle("KA01AB1234", "White");
+function parkCar(facade: ParkingFacade): ParkingTicket {
+  logSection("Park Vehicle");
 
-const ticket = parkingFacade.parkVehicle(car);
+  const car = new CarCreator().createVehicle("KA01AB1234", "White");
+  const ticket = facade.parkVehicle(car);
 
-console.log("--------------------------------");
+  console.log("Ticket ID  :", ticket.getTicketId());
+  console.log("Slot       :", ticket.getParkingSlot().getSlotNumber());
+  console.log("Entry Time :", ticket.getEntryTime());
 
-console.log("Ticket ID :", ticket.getTicketId());
+  facade.printExpressionSlots(
+    SlotFilterBuilder.create().ofType(ParkingSlotType.CAR).available().build(),
+  );
 
-console.log("Slot :", ticket.getParkingSlot().getSlotNumber());
+  return ticket;
+}
 
-console.log("Entry Time :", ticket.getEntryTime());
-console.log("--------------------------------");
-parkingFacade.printExpressionSlots(
-  SlotFilterBuilder.create().ofType(ParkingSlotType.CAR).available().build(),
-);
-setTimeout(() => {
-  const completedTicket = parkingFacade.unparkVehicle(ticket);
+function unparkAndBill(facade: ParkingFacade, ticket: ParkingTicket): void {
+  logSection("Unpark, Bill & Pay");
+
+  const completedTicket = facade.unparkVehicle(ticket);
 
   console.log(
     "Duration :",
@@ -66,21 +82,31 @@ setTimeout(() => {
     "minutes",
   );
 
-  const billingService = new BillingService();
-
-  const bill = billingService.calculate(completedTicket, [
+  const bill = new BillingService().calculate(completedTicket, [
     AdditionalService.CAR_WASH,
     AdditionalService.PREMIUM_PARKING,
     AdditionalService.EV_CHARGING,
   ]);
 
-  console.log("-------------------------");
-
   console.log(bill.getDescription());
-
   console.log("Amount : ₹", bill.getAmount());
 
-  const processor = new RazorpayPaymentProcessor();
+  new RazorpayPaymentProcessor().process(500);
+}
 
-  processor.process(500);
-}, 3000);
+function main(): void {
+  const parkingFacade = Application.createParkingFacade();
+
+  // showInitialAvailability(parkingFacade);
+  // demoMonthlyPassCloning();
+
+  const ticket = parkCar(parkingFacade);
+  showInitialAvailability(parkingFacade);
+  const ticket2 = parkCar(parkingFacade);
+  showInitialAvailability(parkingFacade);
+  const ticket3 = parkCar(parkingFacade);
+
+  // setTimeout(() => unparkAndBill(parkingFacade, ticket), UNPARK_DELAY_MS);
+}
+
+main();
